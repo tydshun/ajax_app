@@ -5,17 +5,20 @@ class PostsController < ApplicationController
 
   def create
     Post.create(content: params[:content])
-    edirect_to action: :index
+    redirect_to action: :index
   end
 
   def checked
+    
     post = Post.find(params[:id])
-    if post.checked 
+    # 設定したURLパラメーターから、既読したメモのidが渡されるように設定する、そのidを使用して該当するレコードを取得している
+    if post.checked
+      # post.checkedという既読であるか否かを判定するプロパティを指定し、既読であれば「既読を解除するためにfalseへ変更」し、既読でなければ「既読にするためtrueへ変更
       post.update(checked: false)
+      # updateというActiveRecordのメソッドを使用して更新
     else
       post.update(checked: true)
     end
-
     item = Post.find(params[:id])
     render json: { post: item }
   end
